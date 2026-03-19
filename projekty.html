@@ -1,42 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Projekty uczniów</title>
+</head>
+
+<body>
+
+<h1>Projekty uczniów – drukarka 3D</h1>
+
+<form id="projektForm">
+
+Imię ucznia:<br>
+<input type="text" id="imie"><br><br>
+
+Nazwa projektu:<br>
+<input type="text" id="nazwa"><br><br>
+
+Plik STL:<br>
+<input type="file" id="plik"><br><br>
+
+Opis projektu:<br>
+<textarea id="opis"></textarea><br><br>
+
+<button type="submit">Dodaj projekt</button>
+
+</form>
+
+<h2>Lista projektów</h2>
+
+<ul id="listaProjektow"></ul>
+
 <script>
+
 const form = document.getElementById('projektForm');
 const lista = document.getElementById('listaProjektow');
 
-// funkcja do wyświetlania projektów z localStorage
-function wyswietlProjekty() {
-  lista.innerHTML = '';
-  const projekty = JSON.parse(localStorage.getItem('projekty')) || [];
-  projekty.forEach(p => {
-    const li = document.createElement('li');
-    li.innerHTML = `<strong>${p.nazwa}</strong> (${p.imie}) - ${p.opis} - <a href="${p.url}" download="${p.plikName}">Pobierz plik</a>`;
-    lista.appendChild(li);
-  });
+function wyswietl(){
+lista.innerHTML="";
+const projekty = JSON.parse(localStorage.getItem('projekty')) || [];
+
+projekty.forEach(p=>{
+const li=document.createElement("li");
+li.innerHTML=`<b>${p.nazwa}</b> (${p.imie}) - ${p.opis}`;
+lista.appendChild(li);
+});
 }
 
-// przy ładowaniu strony
-wyswietlProjekty();
+wyswietl();
 
-// obsługa formularza
-form.addEventListener('submit', function(e){
-  e.preventDefault();
-  
-  const imie = document.getElementById('imie').value;
-  const nazwa = document.getElementById('nazwa').value;
-  const plikInput = document.getElementById('plik');
-  const opis = document.getElementById('opis').value;
-  
-  if(!plikInput.files[0]) { alert("Wybierz plik!"); return; }
-  
-  const plik = plikInput.files[0];
-  const url = URL.createObjectURL(plik);
+form.addEventListener("submit",function(e){
 
-  const projekty = JSON.parse(localStorage.getItem('projekty')) || [];
-  projekty.push({imie, nazwa, opis, url, plikName: plik.name});
-  localStorage.setItem('projekty', JSON.stringify(projekty));
-  
-  // odśwież listę
-  wyswietlProjekty();
-  
-  form.reset();
+e.preventDefault();
+
+const imie=document.getElementById("imie").value;
+const nazwa=document.getElementById("nazwa").value;
+const opis=document.getElementById("opis").value;
+
+const projekty = JSON.parse(localStorage.getItem('projekty')) || [];
+
+projekty.push({imie,nazwa,opis});
+
+localStorage.setItem("projekty",JSON.stringify(projekty));
+
+wyswietl();
+
+form.reset();
+
 });
+
 </script>
+
+</body>
+</html>
